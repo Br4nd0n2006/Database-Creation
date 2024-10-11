@@ -1,0 +1,38 @@
+# Define the DDL SQL 
+sql = """
+CREATE TABLE "user" (
+	"UserID"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"user_name"	TEXT,
+	"user_password" TEXT,
+	"user_firstname" TEXT
+);
+CREATE TABLE "reviews" (
+	"reviewID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"review_text" TEXT,
+	"userID" INTEGER,
+	FOREIGN KEY(userID) REFERENCES user(userID)
+);
+insert into user (user_name, user_password, user_firstname) values ('JoeMama343', '1', 'Joe');
+insert into user (user_name, user_password, user_firstname) values ('SkibidiToilet', '1', 'Dylan');
+insert into reviews (review_text, userID) values ('I am leaving a review', 1);
+insert into reviews (review_text, userID) values ('what a load of shite', 1)
+"""
+#
+# global database name
+#
+database_file = 'review.db'
+# Delete the database
+# in case it already exists
+#
+if os.path.exists(database_file):
+  os.remove(database_file)
+#
+# Connect to the database
+#
+conn = sqlite3.connect(database_file)
+# Get a cursor pointing to the database
+cursor = conn.cursor()
+# Create the tables
+cursor.executescript(sql)
+# Commit to save everything
+conn.commit()
