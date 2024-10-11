@@ -1,0 +1,24 @@
+def query_database(database, query, params=()):
+	Lconn = sqlite3.connect(database)
+	cur = Lconn.cursor()			# use a local cursor
+	cur.execute(query, params)
+	rows = cur.fetchall()
+	cur.close()
+	return rows
+#
+#
+#Executes the sql statement to INSERT and UPDATE rows
+#
+def execute_sql(database, sql_statement, params=()):
+    try:
+        Lconn = sqlite3.connect(database)
+        cur = Lconn.cursor()
+        cur.execute(sql_statement, params)
+        Lconn.commit()
+        lastrowid = cur.lastrowid
+        return lastrowid
+    except sqlite3.Error as e:
+        print(f"SQLite error: {e}") # prints an error if there is an error with SQL
+        return None
+    finally:
+        Lconn.close()
